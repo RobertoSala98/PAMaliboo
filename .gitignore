@@ -22,3 +22,8 @@ venv/
 
 # SFTP config files
 sftp-config.json
+
+pyvenv.cfg
+lib64
+lib/python3.10/
+bin/

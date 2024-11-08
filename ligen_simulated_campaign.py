@@ -18,6 +18,7 @@ import os
 import pandas as pd
 from sklearn.gaussian_process.kernels import Matern
 from sklearn.linear_model import Ridge
+import sys
 
 from pamaliboo.acquisitions import ExpectedImprovementMachineLearning as EIML
 from pamaliboo.batch import BatchExecutor
@@ -28,21 +29,21 @@ from pamaliboo.optimizer import OptimizerSimulator
 
 
 # Campaign parameters
-parallelism = 10
-num_runs = 5
-num_iter_seq = 100
-n_init = 5
-errinit = 1.5
-trans = 50
-root_rng_seed = 20230524  # int(sys.argv[1])
-pool_seq_parallelism = 4
+parallelism = 12
+num_runs = 1
+num_iter_seq = 200
+n_init = 10
+errinit = 1.5 # non li uso
+trans = 50 # non lo uso
+root_rng_seed = int(sys.argv[1])
+pool_seq_parallelism = 12 # quanti sequenziali fai alla volta
 root_output_folder = os.path.join('outputs',
                                  f'simulated_p{parallelism}_init{n_init}')
 os.makedirs(root_output_folder, exist_ok=True)
 log_file = os.path.basename(root_output_folder) + '.log'
 log_file_path = os.path.join(root_output_folder, log_file)
 ml_models = [Ridge()]
-all_parallelism_levels = [parallelism, 1]
+all_parallelism_levels = [parallelism]
 
 # Other parameters
 opt_bounds = {'ALIGN_SPLIT': [8, 72.01], 'OPTIMIZE_SPLIT': [8, 72.01],
@@ -88,7 +89,8 @@ def run_experiment(rng):
 
     # Get random initial points
     np.random.seed(rng)
-    df_init = domain_df.sample(n_init*par)
+    #df_init = domain_df.sample(n_init*par)
+    df_init = domain_df.sample(n_init)
 
     # Run initial points
     res = batch_ex.execute(df_init, timeout=timeout)
@@ -99,8 +101,8 @@ def run_experiment(rng):
 
     # Perform optimization
     optimizer.initialize(init_history)
-    optimizer.maximize(n_iter=num_iter_seq*par, parallelism_level=par,
-                       timeout=timeout)
+    #optimizer.maximize(n_iter=num_iter_seq*par, parallelism_level=par, timeout=timeout)
+    optimizer.maximize(n_iter=num_iter_seq, parallelism_level=par, timeout=timeout)
     logger.info("Run with RNG seed %d completed", rng)
 
 
