@@ -45,7 +45,7 @@ for parallelism in [4, 8, 12]:
   log_file = os.path.basename(root_output_folder) + '.log'
   log_file_path = os.path.join(root_output_folder, log_file)
   ml_models = [Ridge()]
-  all_parallelism_levels = [1]
+  all_parallelism_levels = [parallelism, 1]
 
   # Other parameters
   opt_bounds = {'ALIGN_SPLIT': [8, 72.01], 'OPTIMIZE_SPLIT': [8, 72.01],
@@ -69,8 +69,11 @@ for parallelism in [4, 8, 12]:
 
   # Function for a single experiment
   def run_experiment(rng_seed):
-      
-      rng = 100*rng_seed[0] + rng_seed[1]
+
+      if type(rng_seed) == int:
+        rng = rng_seed
+      elif type(rng_seed) == list:
+        rng = 100*rng_seed[0] + rng_seed[1]
 
       logger.info("New run with RNG seed %d", rng)
       # Create output folder for this experiment
@@ -128,7 +131,7 @@ for parallelism in [4, 8, 12]:
         with Pool(pool_seq_parallelism) as pool:
           pool.map(run_experiment, group_seeds)
         #for seed in group_seeds:
-        #  run_experiment(r, seed)
+        #  run_experiment(seed)
         logger.info("Parallel batch completed")
     else:
       for rng in rng_seeds:
