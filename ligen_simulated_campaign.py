@@ -31,7 +31,9 @@ from pamaliboo.optimizer import OptimizerSimulator
 # Campaign parameters
 for parallelism in [4, 8, 12]:
   num_runs = 10
-  num_iter_seq = 50
+  num_iter_seq = 80
+  if parallelism > 4:
+    num_iter_seq = 50
   n_init = 10
   errinit = 1.5 # non li uso
   trans = 50 # non lo uso
@@ -50,7 +52,7 @@ for parallelism in [4, 8, 12]:
                 'OPTIMIZE_REPS': [1, 5.01], 'CUDA_THREADS': [32, 256.01],
                 'N_RESTART': [256, 1024.01], 'CLIPPING': [10, 256.01],
                 'SIM_THRESH': [1, 4.01], 'BUFFER_SIZE': [1048576, 52428800.01]}
-  opt_constraints = {'RMSD_0.75': (0, 2.1)}
+  opt_constraints = {'RMSD_0.75': (0, 2.25)}
   features = list(opt_bounds.keys())
   domain = os.path.join('resources', 'ligen', 'ligen_synth_domain.csv')
   table = os.path.join('resources', 'ligen', 'ligen_synth_table.csv')
