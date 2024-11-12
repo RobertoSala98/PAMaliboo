@@ -72,12 +72,13 @@ for parallelism in [4, 8, 12]:
 
       if type(rng_seed) == int:
         rng = rng_seed
+        output_folder = os.path.join(root_output_folder, f'par_{par}', f'rng_{rng}')
       elif type(rng_seed) == list:
         rng = 100*rng_seed[0] + rng_seed[1]
+        output_folder = os.path.join(root_output_folder, f'par_{par}', f'rng_{rng_seed[0]}', f'{rng_seed[1]}')
 
       logger.info("New run with RNG seed %d", rng)
       # Create output folder for this experiment
-      output_folder = os.path.join(root_output_folder, f'par_{par}', f'rng_{rng_seed[0]}', f'{rng_seed[1]}')
       os.makedirs(output_folder, exist_ok=True)
 
       # Initialize library objects
