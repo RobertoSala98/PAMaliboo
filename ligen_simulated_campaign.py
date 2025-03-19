@@ -29,15 +29,13 @@ from pamaliboo.optimizer import OptimizerSimulator
 
 
 # Campaign parameters
-for parallelism in [4, 8, 12]:
-  num_runs = 10
-  num_iter_seq = 80
-  if parallelism > 4:
-    num_iter_seq = 50
-  n_init = 10
+for parallelism in [10]:
+  num_runs = 1
+  num_iter_seq = 1045
+  n_init = 50
   errinit = 1.5 # non li uso
   trans = 50 # non lo uso
-  root_rng_seed = 20241108 #int(sys.argv[1])
+  root_rng_seed = int(sys.argv[1])
   pool_seq_parallelism = parallelism # quanti sequenziali fai alla volta
   root_output_folder = os.path.join('outputs',
                                   f'simulated_p{parallelism}_init{n_init}')
@@ -52,7 +50,7 @@ for parallelism in [4, 8, 12]:
                 'OPTIMIZE_REPS': [1, 5.01], 'CUDA_THREADS': [32, 256.01],
                 'N_RESTART': [256, 1024.01], 'CLIPPING': [10, 256.01],
                 'SIM_THRESH': [1, 4.01], 'BUFFER_SIZE': [1048576, 52428800.01]}
-  opt_constraints = {'RMSD_0.75': (0, 2.25)}
+  opt_constraints = {'RMSD_0.75': (0, 2.1)}
   features = list(opt_bounds.keys())
   domain = os.path.join('resources', 'ligen', 'ligen_synth_domain.csv')
   table = os.path.join('resources', 'ligen', 'ligen_synth_table.csv')
@@ -110,8 +108,7 @@ for parallelism in [4, 8, 12]:
 
       # Perform optimization
       optimizer.initialize(init_history)
-      #optimizer.maximize(n_iter=num_iter_seq*par, parallelism_level=par, timeout=timeout)
-      optimizer.maximize(n_iter=num_iter_seq, parallelism_level=par, timeout=timeout)
+      optimizer.maximize(n_iter=num_iter_seq*par, parallelism_level=par, timeout=timeout)
       logger.info("Run with RNG seed %d completed", rng)
 
 

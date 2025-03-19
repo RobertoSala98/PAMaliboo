@@ -1,11 +1,17 @@
-python3 ligen_simulated_campaign.py 20241108 &
-python3 ligen_simulated_campaign.py 20241109 &
-python3 ligen_simulated_campaign.py 20241110 &
-python3 ligen_simulated_campaign.py 20241111 &
-python3 ligen_simulated_campaign.py 20241112 &
-python3 ligen_simulated_campaign.py 20241113 &
-python3 ligen_simulated_campaign.py 20241114 &
-python3 ligen_simulated_campaign.py 20241115 &
-python3 ligen_simulated_campaign.py 20241116 &
-python3 ligen_simulated_campaign.py 20241117 &
+./lib/hq server start &
+
+sleep 2
+
+for i in {1..10}
+do 
+    ./lib/hq worker start &
+done
+
+for i in {20250301..20250310}
+do 
+    python3 ligen_simulated_campaign.py $seed &
+    sleep 3
+done
 wait
+
+./lib/hq server stop &
