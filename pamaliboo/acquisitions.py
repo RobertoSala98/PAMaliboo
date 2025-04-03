@@ -92,7 +92,7 @@ class AcquisitionFunction(ABC):
 
     for x_try in x_seeds:
       # Find the minimum of minus the acquisition function
-      res = minimize(lambda x: -self.evaluate(x), x0=x_try.reshape(1, -1),
+      res = minimize(lambda x: -self.evaluate(x), x0=x_try,
                      bounds=bounds_arr, method=self.solver)
       if not res.success:
           continue

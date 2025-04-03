@@ -31,7 +31,7 @@ from pamaliboo.optimizer import OptimizerSimulator
 # Campaign parameters
 for parallelism in [10]:
   num_runs = 1
-  num_iter_seq = 1045
+  num_iter_seq = 1050
   n_init = 50
   errinit = 1.5 # non li uso
   trans = 50 # non lo uso
@@ -43,7 +43,7 @@ for parallelism in [10]:
   log_file = os.path.basename(root_output_folder) + '.log'
   log_file_path = os.path.join(root_output_folder, log_file)
   ml_models = [Ridge()]
-  all_parallelism_levels = [parallelism, 1]
+  all_parallelism_levels = [1, parallelism]
 
   # Other parameters
   opt_bounds = {'ALIGN_SPLIT': [8, 72.01], 'OPTIMIZE_SPLIT': [8, 72.01],
